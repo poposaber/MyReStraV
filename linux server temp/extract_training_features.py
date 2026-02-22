@@ -28,7 +28,7 @@ with h5py.File(output_h5, "w") as h5f:
     dt = h5py.special_dtype(vlen=str)
     path_ds = h5f.create_dataset("path", (len(all_videos),), dtype=dt)
     label_ds = h5f.create_dataset("label", (len(all_videos),), dtype="i")
-    feat_ds = h5f.create_dataset("features", (len(all_videos), 21), dtype="f")
+    feat_ds = h5f.create_dataset("features", (len(all_videos), 25), dtype="f")
 
     for idx in tqdm(range(0, len(all_videos), batch_size), desc="Extracting features"):
         batch_items = all_videos[idx:idx+batch_size]

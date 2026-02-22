@@ -42,11 +42,6 @@ paths_bal = paths[balanced_idx]
 
 print(f"Balanced dataset size: {len(X_bal)} (real={n_balanced}, fake={n_balanced})")
 
-#Normalize
-mean = X_bal.mean(axis=0, keepdims=True)
-std = X_bal.std(axis=0, keepdims=True) + 1e-8
-X_bal = (X_bal - mean) / std
-
 #Stratified 50/50 train/test split
 X_train, X_test, y_train, y_test, paths_train, paths_test = train_test_split(
     X_bal,
@@ -56,6 +51,13 @@ X_train, X_test, y_train, y_test, paths_train, paths_test = train_test_split(
     stratify=y_bal,
     random_state=42
 )
+
+#Normalize (Fit on Train, Transform on Test)
+mean = X_train.mean(axis=0, keepdims=True)
+std = X_train.std(axis=0, keepdims=True) + 1e-8
+
+X_train = (X_train - mean) / std
+X_test = (X_test - mean) / std
 
 #Convert to tensors and datasets
 train_ds = TensorDataset(torch.from_numpy(X_train), torch.from_numpy(y_train))
@@ -91,7 +93,7 @@ print("Label distribution (test):", torch.bincount(torch.from_numpy(y_test)))
 #Train
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 class MLP(nn.Module):
-    def __init__(self, in_dim=21, h1=64, h2=32):
+    def __init__(self, in_dim=25, h1=64, h2=32):
         super().__init__()
         self.net = nn.Sequential(
             nn.Linear(in_dim, h1),
@@ -103,7 +105,10 @@ class MLP(nn.Module):
     def forward(self, x):
         return self.net(x)
 
-model = MLP().to(device)
+in_dim = X_train.shape[1]
+print(f"Model input dimension: {in_dim}")
+
+model = MLP(in_dim=in_dim).to(device)
 criterion = nn.BCEWithLogitsLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
