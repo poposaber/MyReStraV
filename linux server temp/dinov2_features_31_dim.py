@@ -81,11 +81,16 @@ def extract_dinov2_embeddings(video_paths, device=None, T=24, window_sec=2.0):
         return Z
 
 def compute_temporal_geometry(Z):
-    delta = Z[:, 1:, :] - Z[:, :-1, :]                                 
-    d = delta.norm(dim=-1)                                    
-    cos = F.cosine_similarity(delta[:, :-1, :], delta[:, 1:,  :], dim=-1)  
+    delta = Z[:, 1:, :] - Z[:, :-1, :]
+    second_delta = delta[:, 1:, :] - delta[:, :-1, :]                                 
+    d = delta.norm(dim=-1)
+    second_d = second_delta.norm(dim=-1)                                    
+    cos = F.cosine_similarity(delta[:, :-1, :], delta[:, 1:,  :], dim=-1, eps=1e-7) 
+    if torch.isnan(cos).any():
+        print("Warning: NaN values found in cosine similarity. This may be due to zero-length vectors.")
+        cos = torch.nan_to_num(cos, nan=0.0) 
     theta = torch.rad2deg(torch.acos(cos.clamp(-1, 1)))      
-    return d, theta
+    return d, theta, second_d
 
 def moment4(x):
     mu  = x.mean(dim=-1)                   
@@ -95,10 +100,13 @@ def moment4(x):
     return mu, mn, mx, var
 
 def features_from_Z(Z):
-    d, t = compute_temporal_geometry(Z)           
-    d7 = d[:, :7]                             
-    t6 = t[:, :6]                            
+    d, t, second_d = compute_temporal_geometry(Z)           
+    d7 = d[:, :7]
+    s6 = second_d[:, :6]                             
+    t6 = t[:, :6]
+                                
     mu_d, mn_d, mx_d, var_d = moment4(d)
     mu_t, mn_t, mx_t, var_t = moment4(t)
-    stats = torch.stack([mu_d, mn_d, mx_d, var_d, mu_t, mn_t, mx_t, var_t], dim=1) 
-    return torch.cat([d7, t6, stats], dim=1)
+    mu_second_d, mn_second_d, mx_second_d, var_second_d = moment4(second_d)
+    stats = torch.stack([mu_d, mn_d, mx_d, var_d, mu_t, mn_t, mx_t, var_t, mu_second_d, mn_second_d, mx_second_d, var_second_d], dim=1) 
+    return torch.cat([d7, t6, s6, stats], dim=1)

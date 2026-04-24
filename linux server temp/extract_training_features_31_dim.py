@@ -8,7 +8,7 @@ import sys
 repo_root = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(repo_root))
 
-import dinov2_features as d2
+import dinov2_features_31_dim as d2
 
 batch_size = 128
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -21,13 +21,14 @@ real_videos = sorted(real_root.rglob("*.mp4"))
 fake_videos = sorted(fake_root.rglob("*.mp4"))
 all_videos = [(str(p), 1) for p in real_videos] + [(str(p), 0) for p in fake_videos]
 
+print(f"real_root: {real_root}, fake_root: {fake_root}")
 print(f"Found {len(real_videos)} real and {len(fake_videos)} fake videos.")
 
 with h5py.File(output_h5, "w") as h5f:
     dt = h5py.special_dtype(vlen=str)
     path_ds = h5f.create_dataset("path", (len(all_videos),), dtype=dt)
     label_ds = h5f.create_dataset("label", (len(all_videos),), dtype="i")
-    feat_ds = h5f.create_dataset("features", (len(all_videos), 21), dtype="f")
+    feat_ds = h5f.create_dataset("features", (len(all_videos), 31), dtype="f")
 
     for idx in tqdm(range(0, len(all_videos), batch_size), desc="Extracting features"):
         batch_items = all_videos[idx:idx+batch_size]

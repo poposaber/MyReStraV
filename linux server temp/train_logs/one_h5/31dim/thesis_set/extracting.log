@@ -1,0 +1,19 @@
+Using cache found in /root/.cache/torch/hub/facebookresearch_dinov2_main
+/root/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/swiglu_ffn.py:51: UserWarning: xFormers is not available (SwiGLU)
+  warnings.warn("xFormers is not available (SwiGLU)")
+/root/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/attention.py:33: UserWarning: xFormers is not available (Attention)
+  warnings.warn("xFormers is not available (Attention)")
+/root/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/block.py:40: UserWarning: xFormers is not available (Block)
+  warnings.warn("xFormers is not available (Block)")
+real_root: DATA/TRAINING_DATA/REAL, fake_root: DATA/TRAINING_DATA/FAKE
+Found 40000 real and 40000 fake videos.
+Extracting features:  63%|███████████████████████████████████                     | 392/625 [3:13:24<1:15:20, 19.40s/it]Error decoding clip: Could not open input file: DATA/TRAINING_DATA/FAKE/pika_videos_example/pika-05a41cc3-ec6a-5894-b8b9-df06cabb488e.mp4 Invalid data found when processing input
+Extracting features:  65%|████████████████████████████████████▌                   | 408/625 [3:23:29<2:16:45, 37.81s/it]Error decoding clip: Could not open input file: DATA/TRAINING_DATA/FAKE/pika_videos_example/pika-3cffa516-9265-5e8f-9f8e-31f4d776e86e.mp4 Invalid data found when processing input
+Extracting features:  66%|█████████████████████████████████████                   | 413/625 [3:26:37<2:13:59, 37.92s/it]Error decoding clip: Could not open input file: DATA/TRAINING_DATA/FAKE/pika_videos_example/pika-49914d08-dd26-5444-a692-393dc9ca1bdf.mp4 Invalid data found when processing input
+Extracting features:  66%|█████████████████████████████████████▏                  | 415/625 [3:27:51<2:10:58, 37.42s/it]Error decoding clip: Could not open input file: DATA/TRAINING_DATA/FAKE/pika_videos_example/pika-53723658-b8b5-57de-9848-9f6fb7c18598.mp4 Invalid data found when processing input
+Extracting features:  68%|█████████████████████████████████████▉                  | 424/625 [3:33:33<2:06:24, 37.73s/it]Error decoding clip: Could not open input file: DATA/TRAINING_DATA/FAKE/pika_videos_example/pika-72117897-db51-50a8-a419-59333c939d10.mp4 Invalid data found when processing input
+Extracting features:  68%|██████████████████████████████████████▎                 | 428/625 [3:35:59<2:01:25, 36.98s/it]Error decoding clip: Could not open input file: DATA/TRAINING_DATA/FAKE/pika_videos_example/pika-7eec898a-0bcc-5563-a775-e069fac68532.mp4 Invalid data found when processing input
+Extracting features:  73%|█████████████████████████████████████████               | 458/625 [3:54:49<1:44:04, 37.39s/it]Error decoding clip: Could not open input file: DATA/TRAINING_DATA/FAKE/pika_videos_example/pika-df13c148-de44-59eb-a468-76c6f189f50a.mp4 Invalid data found when processing input
+Extracting features:  86%|█████████████████████████████████████████████████▉        | 538/625 [4:20:29<24:03, 16.60s/it]Error decoding clip: Could not open input file: DATA/TRAINING_DATA/FAKE/t2vz_videos_example/t2vz-e55a9f17-702e-5e21-89d8-515600eae736.mp4 Invalid data found when processing input
+Extracting features: 100%|██████████████████████████████████████████████████████████| 625/625 [4:45:44<00:00, 27.43s/it]
+Saved features for 80000 videos to training_features.h5
